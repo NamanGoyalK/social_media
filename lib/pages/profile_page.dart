@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media/components/post_list_tile.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../components/back_button.dart';
 
@@ -92,6 +93,57 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     user["email"],
                     style: TextStyle(color: Colors.grey[600]),
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  Text(
+                    "M Y  P O S T S",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontSize: 20,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Expanded(
+                    child: FutureBuilder<List<Map<String, dynamic>>>(
+                      future: Supabase.instance.client
+                          .from('Posts')
+                          .select()
+                          .eq('UserEmail', user["email"])
+                          .order('created_at', ascending: false)
+                          .then((response) => response),
+                      builder: (context, postSnapshot) {
+                        if (postSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (postSnapshot.hasError) {
+                          return Center(
+                            child: Text("Error: ${postSnapshot.error}"),
+                          );
+                        } else if (postSnapshot.hasData &&
+                            postSnapshot.data!.isNotEmpty) {
+                          final posts = postSnapshot.data!;
+                          return ListView.builder(
+                            itemCount: posts.length,
+                            itemBuilder: (context, index) {
+                              final post = posts[index];
+                              return PostListTile(
+                                title: post["PostMessage"],
+                                subTitle: post["UserEmail"],
+                                postedAt: post["created_at"],
+                              );
+                            },
+                          );
+                        } else {
+                          return const Center(child: Text("No posts found"));
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),

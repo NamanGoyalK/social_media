@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../components/drawer.dart';
-import '../components/list_tile.dart';
+import '../components/post_list_tile.dart';
 import '../components/post_button.dart';
 import '../components/textfield.dart';
 
@@ -101,9 +101,14 @@ class HomePage extends StatelessWidget {
                     // get data from each post
                     String message = post['PostMessage'] ?? 'No message';
                     String userEmail = post['UserEmail'] ?? 'Unknown';
+                    String postedAt = post['created_at'] ?? 'Unknown';
 
                     // return as a list tile
-                    return MyListTile(title: message, subTitle: userEmail);
+                    return PostListTile(
+                      title: message,
+                      subTitle: userEmail,
+                      postedAt: postedAt,
+                    );
                   },
                 ),
               );

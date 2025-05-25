@@ -9,17 +9,30 @@ import 'pages/users_page.dart';
 import 'theme/theme.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load();
+    debugPrint('Loading environment variables...');
+    await dotenv.load();
 
-  await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
-    debug: true,
-  );
+    final supabaseUrl = dotenv.env['SUPABASE_URL'];
+    final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'];
 
-  runApp(const MyApp());
+    debugPrint('Supabase URL: $supabaseUrl');
+    debugPrint('Starting Supabase initialization...');
+
+    await Supabase.initialize(
+      url: supabaseUrl!,
+      anonKey: supabaseAnonKey!,
+      debug: true,
+    );
+
+    debugPrint('Supabase initialization completed successfully');
+    runApp(const MyApp());
+  } catch (error) {
+    debugPrint('X Initialization error: $error');
+    rethrow;
+  }
 }
 
 class MyApp extends StatelessWidget {

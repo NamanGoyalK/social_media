@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../components/user_list_tile.dart';
 import '../components/back_button.dart';
-import '../components/list_tile.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({super.key});
@@ -77,7 +78,7 @@ class UsersPage extends StatelessWidget {
                     String username = user["username"];
                     String email = user["email"];
 
-                    return MyListTile(title: username, subTitle: email);
+                    return UserListTile(title: username, subTitle: email);
                   },
                 ),
               ),
