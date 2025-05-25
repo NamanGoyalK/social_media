@@ -136,6 +136,8 @@ class ProfilePage extends StatelessWidget {
                                 title: post["PostMessage"],
                                 subTitle: post["UserEmail"],
                                 postedAt: post["created_at"],
+                                postId: post["id"].toString(),
+                                authorId: post["UserEmail"],
                               );
                             },
                           );

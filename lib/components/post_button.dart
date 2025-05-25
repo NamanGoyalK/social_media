@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class PostButton extends StatelessWidget {
   final void Function()? onTap;
 
-  const PostButton({
-    super.key,
-    required this.onTap,
-  });
+  const PostButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +14,12 @@ class PostButton extends StatelessWidget {
           color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(15),
         ),
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(13),
         margin: const EdgeInsets.only(left: 10),
         child: Center(
           child: Icon(
             Icons.done_rounded,
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.inversePrimary,
           ),
         ),
       ),

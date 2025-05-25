@@ -102,12 +102,15 @@ class HomePage extends StatelessWidget {
                     String message = post['PostMessage'] ?? 'No message';
                     String userEmail = post['UserEmail'] ?? 'Unknown';
                     String postedAt = post['created_at'] ?? 'Unknown';
+                    int postId = post['id'] ?? '';
 
                     // return as a list tile
                     return PostListTile(
                       title: message,
                       subTitle: userEmail,
                       postedAt: postedAt,
+                      postId: postId.toString(),
+                      authorId: userEmail,
                     );
                   },
                 ),
