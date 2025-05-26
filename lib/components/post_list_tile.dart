@@ -8,6 +8,7 @@ class PostListTile extends StatefulWidget {
   final String subTitle;
   final String postedAt;
   final String authorId;
+  final String? imageUrl; // Added imageUrl parameter
 
   const PostListTile({
     super.key,
@@ -16,6 +17,7 @@ class PostListTile extends StatefulWidget {
     required this.subTitle,
     required this.postedAt,
     required this.authorId,
+    this.imageUrl, // Made optional
   });
 
   @override
@@ -350,9 +352,11 @@ class _PostListTileState extends State<PostListTile> {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Post content section
             ListTile(
-              title: Text(widget.title),
+              title: widget.title.isNotEmpty ? Text(widget.title) : null,
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -378,6 +382,91 @@ class _PostListTileState extends State<PostListTile> {
                 ],
               ),
             ),
+
+            // Image section (if exists)
+            if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: ColorFiltered(
+                    colorFilter: const ColorFilter.matrix(<double>[
+                      0.2126, 0.7152, 0.0722, 0, 0, // Red channel -> Grayscale
+                      0.2126,
+                      0.7152,
+                      0.0722,
+                      0,
+                      0, // Green channel -> Grayscale
+                      0.2126, 0.7152, 0.0722, 0, 0, // Blue channel -> Grayscale
+                      0, 0, 0, 1, 0, // Alpha channel (unchanged)
+                    ]),
+                    child: Image.network(
+                      widget.imageUrl!,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.inversePrimary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              value:
+                                  loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                              strokeWidth: 2,
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                            ),
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.inversePrimary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.broken_image_outlined,
+                                size: 48,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.inversePrimary.withOpacity(0.5),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Failed to load image',
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.inversePrimary.withOpacity(0.5),
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+
+            // Action buttons section
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,

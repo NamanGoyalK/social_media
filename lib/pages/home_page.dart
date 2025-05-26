@@ -1,26 +1,125 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import '../components/drawer.dart';
 import '../components/post_list_tile.dart';
 import '../components/post_button.dart';
 import '../components/textfield.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   // text controller
   final TextEditingController newPostController = TextEditingController();
 
-  // post message
+  // image picker
+  final ImagePicker _picker = ImagePicker();
+  File? _selectedImage;
+  bool _isUploading = false;
+
+  // pick image from gallery
+  Future<void> _pickImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1080,
+        maxHeight: 1080,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        setState(() {
+          _selectedImage = File(image.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
+    }
+  }
+
+  // remove selected image
+  void _removeImage() {
+    setState(() {
+      _selectedImage = null;
+    });
+  }
+
+  // upload image to Supabase Storage
+  Future<String?> _uploadImage(File imageFile) async {
+    try {
+      final bytes = await imageFile.readAsBytes();
+      final fileName = 'post_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      await Supabase.instance.client.storage
+          .from('post-images')
+          .uploadBinary(fileName, bytes);
+
+      final imageUrl = Supabase.instance.client.storage
+          .from('post-images')
+          .getPublicUrl(fileName);
+
+      return imageUrl;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
+
+  // post message with optional image
   void postMessage() async {
-    if (newPostController.text.isNotEmpty) {
-      await Supabase.instance.client.from('Posts').insert({
-        'PostMessage': newPostController.text,
-        'UserEmail': Supabase.instance.client.auth.currentUser?.email,
-      });
+    if (newPostController.text.isEmpty && _selectedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please add a message or image')),
+      );
+      return;
     }
 
-    newPostController.clear();
+    setState(() {
+      _isUploading = true;
+    });
+
+    try {
+      String? imageUrl;
+
+      // Upload image if selected
+      if (_selectedImage != null) {
+        imageUrl = await _uploadImage(_selectedImage!);
+      }
+
+      // Insert post into database
+      await Supabase.instance.client.from('Posts').insert({
+        'PostMessage':
+            newPostController.text.isEmpty ? null : newPostController.text,
+        'UserEmail': Supabase.instance.client.auth.currentUser?.email,
+        'ImageUrl': imageUrl,
+      });
+
+      // Clear form
+      newPostController.clear();
+      setState(() {
+        _selectedImage = null;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Post created successfully!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error creating post: $e')));
+    } finally {
+      setState(() {
+        _isUploading = false;
+      });
+    }
   }
 
   @override
@@ -28,7 +127,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: const Text("T H E  W A L L"),
+        title: const Text("T H E W A L L"),
         backgroundColor: Colors.transparent,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         elevation: 0,
@@ -36,22 +135,134 @@ class HomePage extends StatelessWidget {
       drawer: const MyDrawer(),
       body: Column(
         children: [
-          // TEXTFIELD BOX FOR USER TO TYPE
+          // POST CREATION SECTION
           Padding(
             padding: const EdgeInsets.all(25.0),
-            child: Row(
+            child: Column(
               children: [
-                // textfield
-                Expanded(
-                  child: MyTextfield(
-                    hintText: "Say something",
-                    obscureText: false,
-                    controller: newPostController,
+                // Image preview if selected
+                if (_selectedImage != null)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withOpacity(0.3),
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: ColorFiltered(
+                            colorFilter: const ColorFilter.matrix(<double>[
+                              0.2126,
+                              0.7152,
+                              0.0722,
+                              0,
+                              0,
+                              0.2126,
+                              0.7152,
+                              0.0722,
+                              0,
+                              0,
+                              0.2126,
+                              0.7152,
+                              0.0722,
+                              0,
+                              0,
+                              0,
+                              0,
+                              0,
+                              1,
+                              0,
+                            ]),
+                            child: Image.file(
+                              _selectedImage!,
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: GestureDetector(
+                            onTap: _removeImage,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.6),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
 
-                // post button
-                PostButton(onTap: postMessage),
+                // Text input and buttons row
+                Row(
+                  children: [
+                    // Camera button
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.3),
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.camera_alt_outlined,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 10),
+
+                    // textfield
+                    Expanded(
+                      child: MyTextfield(
+                        hintText: "Say something",
+                        obscureText: false,
+                        controller: newPostController,
+                      ),
+                    ),
+
+                    const SizedBox(width: 10),
+
+                    // post button
+                    _isUploading
+                        ? Container(
+                          padding: const EdgeInsets.all(12),
+                          child: const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        )
+                        : PostButton(onTap: postMessage),
+                  ],
+                ),
               ],
             ),
           ),
@@ -99,10 +310,11 @@ class HomePage extends StatelessWidget {
                     final post = posts[index];
 
                     // get data from each post
-                    String message = post['PostMessage'] ?? 'No message';
+                    String message = post['PostMessage'] ?? '';
                     String userEmail = post['UserEmail'] ?? 'Unknown';
                     String postedAt = post['created_at'] ?? 'Unknown';
-                    int postId = post['id'] ?? '';
+                    int postId = post['id'] ?? 0;
+                    String? imageUrl = post['ImageUrl'];
 
                     // return as a list tile
                     return PostListTile(
@@ -111,6 +323,7 @@ class HomePage extends StatelessWidget {
                       postedAt: postedAt,
                       postId: postId.toString(),
                       authorId: userEmail,
+                      imageUrl: imageUrl,
                     );
                   },
                 ),
