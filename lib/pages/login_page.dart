@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media/pages/forgot_pass_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../components/button.dart';
 import '../components/textfield.dart';
@@ -93,14 +94,25 @@ class _LoginPageState extends State<LoginPage> {
 
                     const SizedBox(height: 10),
 
-                    // forgot password
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          "Forgot Password?",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.inversePrimary,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => const ForgotPasswordPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                            ),
                           ),
                         ),
                       ],
@@ -133,6 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
+
+                    const SizedBox(height: 50),
                   ],
                 ),
               ),
