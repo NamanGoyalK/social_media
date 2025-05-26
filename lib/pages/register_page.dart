@@ -49,8 +49,9 @@ class _RegisterPageState extends State<RegisterPage> {
           throw Exception("Registration failed");
         }
 
-        // Add user to the Users table
-        await Supabase.instance.client.from('Users').insert({
+        // Add user to the users table
+        await Supabase.instance.client.from('users').insert({
+          'id': response.user!.id,
           'username': usernameController.text,
           'email': emailController.text,
         });

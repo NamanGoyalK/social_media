@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
       }
 
       // Insert post into database
-      await Supabase.instance.client.from('Posts').insert({
+      await Supabase.instance.client.from('posts').insert({
         'PostMessage':
             newPostController.text.isEmpty ? null : newPostController.text,
         'UserEmail': Supabase.instance.client.auth.currentUser?.email,
@@ -280,7 +280,7 @@ class _HomePageState extends State<HomePage> {
           // POSTS
           StreamBuilder<List<Map<String, dynamic>>>(
             stream: Supabase.instance.client
-                .from('Posts')
+                .from('posts')
                 .stream(primaryKey: ['id']),
             builder: (context, snapshot) {
               // show loading circle

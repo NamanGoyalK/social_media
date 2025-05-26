@@ -176,7 +176,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     Map<String, dynamic> comment, {
     bool isReply = false,
   }) {
-    final user = comment['Users'];
+    final user = comment['users'];
     final replies =
         isReply
             ? <Map<String, dynamic>>[]

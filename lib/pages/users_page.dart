@@ -13,7 +13,7 @@ class UsersPage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: FutureBuilder<List<dynamic>>(
         future: Supabase.instance.client
-            .from('Users')
+            .from('users')
             .select()
             .then((response) => response as List<dynamic>),
         builder: (context, snapshot) {

@@ -97,7 +97,7 @@ class _PostListTileState extends State<PostListTile> {
           created_at,
           user_id,
           parent_comment_id,
-          Users:user_id (
+          users:user_id (
             username,
             email
           )

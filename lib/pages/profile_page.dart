@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
 
     final response =
         await Supabase.instance.client
-            .from('Users')
+            .from('users')
             .select()
             .eq('email', user!.email!)
             .maybeSingle();
@@ -110,7 +110,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     child: FutureBuilder<List<Map<String, dynamic>>>(
                       future: Supabase.instance.client
-                          .from('Posts')
+                          .from('posts')
                           .select()
                           .eq('UserEmail', user["email"])
                           .order('created_at', ascending: false)
@@ -162,7 +162,7 @@ class ProfilePage extends StatelessWidget {
 
                                     // Delete the post
                                     await Supabase.instance.client
-                                        .from('Posts')
+                                        .from('posts')
                                         .delete()
                                         .eq('id', post["id"]);
 

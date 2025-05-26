@@ -255,24 +255,21 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  onPressed:
-                      _messageController.text.trim().isEmpty
-                          ? null
-                          : _sendMessage,
+                  onPressed: _canSend ? _sendMessage : null,
                   icon: Icon(
                     Icons.send,
                     color:
-                        _messageController.text.trim().isEmpty
-                            ? Theme.of(context).colorScheme.outline
-                            : Theme.of(context).colorScheme.primary,
+                        _canSend
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.outline,
                   ),
                   style: IconButton.styleFrom(
                     backgroundColor:
-                        _messageController.text.trim().isEmpty
-                            ? null
-                            : Theme.of(
+                        _canSend
+                            ? Theme.of(
                               context,
-                            ).colorScheme.primary.withAlpha(25),
+                            ).colorScheme.primary.withAlpha(25)
+                            : null,
                   ),
                 ),
               ],
