@@ -241,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: Icon(
                           Icons.camera_alt_outlined,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.inversePrimary,
                           size: 24,
                         ),
                       ),
