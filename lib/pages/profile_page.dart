@@ -132,12 +132,72 @@ class ProfilePage extends StatelessWidget {
                             itemCount: posts.length,
                             itemBuilder: (context, index) {
                               final post = posts[index];
-                              return PostListTile(
-                                title: post["PostMessage"],
-                                subTitle: post["UserEmail"],
-                                postedAt: post["created_at"],
-                                postId: post["id"].toString(),
-                                authorId: post["UserEmail"],
+                              return Dismissible(
+                                key: Key(post["id"].toString()),
+                                direction: DismissDirection.endToStart,
+                                background: Container(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.inversePrimary.withAlpha(100),
+                                  alignment: Alignment.centerRight,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onDismissed: (direction) async {
+                                  try {
+                                    await Supabase.instance.client
+                                        .from('post_comments')
+                                        .delete()
+                                        .eq('post_id', post["id"]);
+
+                                    await Supabase.instance.client
+                                        .from('post_likes')
+                                        .delete()
+                                        .eq('post_id', post["id"]);
+
+                                    // Delete the post
+                                    await Supabase.instance.client
+                                        .from('Posts')
+                                        .delete()
+                                        .eq('id', post["id"]);
+
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Post deleted successfully",
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  } catch (e) {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "Error deleting post: $e",
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                                child: PostListTile(
+                                  title: post["PostMessage"],
+                                  subTitle: post["UserEmail"],
+                                  postedAt: post["created_at"],
+                                  postId: post["id"].toString(),
+                                  authorId: post["UserEmail"],
+                                ),
                               );
                             },
                           );

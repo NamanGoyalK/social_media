@@ -77,8 +77,13 @@ class UsersPage extends StatelessWidget {
                     // get data from each user
                     String username = user["username"];
                     String email = user["email"];
+                    String userId = user["id"];
 
-                    return UserListTile(title: username, subTitle: email);
+                    return UserListTile(
+                      title: username,
+                      subTitle: email,
+                      userId: userId,
+                    );
                   },
                 ),
               ),

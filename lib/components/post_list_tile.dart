@@ -209,102 +209,114 @@ class _PostListTileState extends State<PostListTile> {
             minChildSize: 0.5,
             maxChildSize: 0.9,
             builder:
-                (context, scrollController) => Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
+                (context, scrollController) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 4,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[400],
-                          borderRadius: BorderRadius.circular(2),
-                        ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(20),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Comments ($commentsCount)',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          controller: scrollController,
-                          itemCount: comments.length,
-                          itemBuilder: (context, index) {
-                            final comment = comments[index];
-                            final user = comment['Users']; // Corrected key
-                            return ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    user?['avatar_url'] != null
-                                        ? NetworkImage(user['avatar_url'])
-                                        : null,
-                                child:
-                                    user?['avatar_url'] == null
-                                        ? Text(user?['username']?[0] ?? 'U')
-                                        : null,
-                              ),
-                              title: Text(
-                                user?['username'] ?? 'Anonymous',
-                              ), // Corrected key
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(comment['content']),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    _formatDateTime(comment['created_at']),
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 4,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[400],
+                            borderRadius: BorderRadius.circular(2),
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _commentController,
-                                decoration: const InputDecoration(
-                                  hintText: 'Add a comment...',
-                                  border: OutlineInputBorder(),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 8,
-                                  ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'Comments ($commentsCount)',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            controller: scrollController,
+                            itemCount: comments.length,
+                            itemBuilder: (context, index) {
+                              final comment = comments[index];
+                              final user = comment['Users']; // Corrected key
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage:
+                                      user?['avatar_url'] != null
+                                          ? NetworkImage(user['avatar_url'])
+                                          : null,
+                                  child:
+                                      user?['avatar_url'] == null
+                                          ? Text(user?['username']?[0] ?? 'U')
+                                          : null,
                                 ),
-                                maxLines: null,
+                                title: Text(
+                                  user?['username'] ?? 'Anonymous',
+                                ), // Corrected key
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(comment['content']),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _formatDateTime(comment['created_at']),
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(6, 16, 16, 28),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.inversePrimary.withAlpha(150),
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            isLoading
-                                ? const CircularProgressIndicator()
-                                : IconButton(
-                                  onPressed: _addComment,
-                                  icon: const Icon(Icons.send),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: _commentController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Add a comment...',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 8,
+                                    ),
+                                  ),
+                                  maxLines: null,
                                 ),
-                          ],
+                              ),
+                              const SizedBox(width: 8),
+                              isLoading
+                                  ? const CircularProgressIndicator()
+                                  : IconButton(
+                                    onPressed: _addComment,
+                                    icon: const Icon(Icons.send),
+                                  ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
           ),
@@ -392,7 +404,7 @@ class _PostListTileState extends State<PostListTile> {
                                 isLiked
                                     ? Theme.of(
                                       context,
-                                    ).colorScheme.inversePrimary.withAlpha(150)
+                                    ).colorScheme.inversePrimary.withAlpha(190)
                                     : Theme.of(
                                       context,
                                     ).colorScheme.inversePrimary,
