@@ -83,3 +83,7 @@ The app uses Supabase as the backend. Below is the database schema:
 2. Set up a Supabase project and configure the API keys in the app.
 3. Run `flutter pub get` to install dependencies.
 4. Use `flutter run` to start the app.
+
+## App Showcase
+
+- [Watch the app showcase video](https://drive.google.com/file/d/1HnwicvkMxhTIr-k4ptnqeqEY1C0smj3D/view)
