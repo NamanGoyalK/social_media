@@ -411,7 +411,7 @@ class _PostListTileState extends State<PostListTile> {
                           decoration: BoxDecoration(
                             color: Theme.of(
                               context,
-                            ).colorScheme.inversePrimary.withOpacity(0.1),
+                            ).colorScheme.inversePrimary.withAlpha(25),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Center(
@@ -434,7 +434,7 @@ class _PostListTileState extends State<PostListTile> {
                           decoration: BoxDecoration(
                             color: Theme.of(
                               context,
-                            ).colorScheme.inversePrimary.withOpacity(0.1),
+                            ).colorScheme.inversePrimary.withAlpha(25),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Column(
@@ -445,7 +445,7 @@ class _PostListTileState extends State<PostListTile> {
                                 size: 48,
                                 color: Theme.of(
                                   context,
-                                ).colorScheme.inversePrimary.withOpacity(0.5),
+                                ).colorScheme.inversePrimary.withAlpha(127),
                               ),
                               const SizedBox(height: 8),
                               Text(
@@ -453,7 +453,7 @@ class _PostListTileState extends State<PostListTile> {
                                 style: TextStyle(
                                   color: Theme.of(
                                     context,
-                                  ).colorScheme.inversePrimary.withOpacity(0.5),
+                                  ).colorScheme.inversePrimary.withAlpha(127),
                                   fontSize: 14,
                                 ),
                               ),
