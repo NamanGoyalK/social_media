@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'backend/auth.dart';
-import 'backend/login_or_register.dart';
+import 'handlers/auth.dart';
+import 'handlers/login_or_register.dart';
 import 'pages/home_page.dart';
 import 'pages/profile_page.dart';
 import 'pages/users_page.dart';
