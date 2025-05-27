@@ -87,3 +87,28 @@ The app uses Supabase as the backend. Below is the database schema:
 ## App Showcase
 
 - [Watch the app showcase video](https://drive.google.com/file/d/1HnwicvkMxhTIr-k4ptnqeqEY1C0smj3D/view)
+
+- **Screenshots**:
+
+  ![Screenshot 1](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748190375.png)
+  ![Screenshot 2](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329553.png)
+  ![Screenshot 3](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329559.png)
+  ![Screenshot 4](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329568.png)
+  ![Screenshot 5](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329572.png)
+  ![Screenshot 6](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329578.png)
+  ![Screenshot 7](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329586.png)
+  ![Screenshot 8](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329589.png)
+  ![Screenshot 9](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329594.png)
+  ![Screenshot 10](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329604.png)
+  ![Screenshot 11](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329607.png)
+  ![Screenshot 12](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329612.png)
+  ![Screenshot 13](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329622.png)
+  ![Screenshot 14](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329624.png)
+  ![Screenshot 15](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329627.png)
+  ![Screenshot 16](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329661.png)
+  ![Screenshot 17](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329665.png)
+  ![Screenshot 18](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329675.png)
+  ![Screenshot 19](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329677.png)
+  ![Screenshot 20](https://raw.githubusercontent.com/NamanGoyalK/social_media/refs/heads/main/demo_pics/Screenshot_1748329686.png)
+
+---
